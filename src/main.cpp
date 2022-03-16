@@ -2,6 +2,10 @@
 #include "FileUtils.hpp"
 #include "VectorUtils.hpp"
 
+struct PriceData {
+  double mean;
+  double median;
+};
 
 int main() {
   const std::string filePath = "prices.txt";
@@ -22,7 +26,7 @@ int main() {
   double arrayMean = Project5::Array::calculateMean(array, arraySize);
 
   // Calculate median
-  double arrayMedian = Project5::Array::calculateMedianSorted(array, arraySize);
+  double arrayMedian = Project5::Array::calculateMedian(array, arraySize, true);
 
   std::cout << "Mean: " << arrayMean << std::endl;
   std::cout << "Median: " << arrayMedian << std::endl;

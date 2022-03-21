@@ -1,11 +1,7 @@
 #include "ArrayUtils.hpp"
 #include "FileUtils.hpp"
+#include "Utils.hpp"
 #include "VectorUtils.hpp"
-
-struct PriceData {
-  double mean;
-  double median;
-};
 
 int main() {
   const std::string filePath = "prices.txt";
@@ -34,8 +30,8 @@ int main() {
   // Using vector
   std::cout << "Using vector:" << std::endl;
 
-  // Read prices from file
-  std::vector<double> vector = Project5::readDataVector(filePath);
+  std::vector<double> vector = Project5::mapMaybe(
+      Project5::readMaybeDouble(Project5::readDataVectorString(filePath)));
 
   // Sort data
   std::sort(vector.begin(), vector.end());

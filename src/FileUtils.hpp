@@ -5,13 +5,32 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <vector>
 
 namespace Project5 {
 
+void printInvalidLines(const std::vector<int> &lines) {
+  if (lines.size() < 1) {
+    return;
+  }
+
+  std::stringstream ss;
+  ss << "Ignoring bad data on line";
+  if (lines.size() > 1) {
+    ss << "s";
+  }
+  ss << " ";
+  for (size_t i = 0; i < lines.size() - 1; i++) {
+    ss << lines[i] << ", ";
+  }
+  ss << lines[lines.size() - 1];
+  std::cerr << ss.str() << std::endl;
+}
+
 size_t readDataArray(const std::string &filePath, int bufferSize,
-                  double buffer[]) {
+                     double buffer[]) {
   std::ifstream fileStream;
   std::string line;
 
@@ -20,56 +39,41 @@ size_t readDataArray(const std::string &filePath, int bufferSize,
     std::cerr << "Failed to open " << filePath << std::endl;
     return 0;
   }
+
   int i = 0;
   int lineNum = 1;
+  std::vector<int> invalidLines = {};
   while (i < bufferSize && fileStream >> line) {
-    const auto readFailed = [](int line) {
-      std::cerr << "Ignoring bad data on line " << line << std::endl;
-    };
     try {
       double price = stod_strict(line);
       buffer[i] = price;
       i++;
     } catch (const std::invalid_argument &) {
-      readFailed(lineNum);
+      invalidLines.push_back(lineNum);
     } catch (const std::out_of_range &) {
-      readFailed(lineNum);
+      invalidLines.push_back(lineNum);
     }
     lineNum++;
   }
+  printInvalidLines(invalidLines);
   return i;
 }
 
-std::vector<double> readDataVector(const std::string &filePath) {
+std::vector<std::string> readDataVectorString(const std::string &filePath) {
   std::ifstream inStream;
-  std::string line;
-  std::vector<double> prices = {};
 
   inStream.open(filePath);
   if (!inStream.is_open()) {
     std::cerr << "Failed to open " << filePath << std::endl;
     return {};
   }
-  int lineNum = 1;
+
+  std::string line;
+  std::vector<std::string> data;
   while (inStream >> line) {
-    const auto readFailed = [](int line) {
-      std::cerr << "Ignoring bad data on line " << line << std::endl;
-    };
-    try {
-      size_t readSize;
-      double price = stod_strict(line, &readSize);
-
-      prices.push_back(price);
-    } catch (const std::invalid_argument &) {
-      readFailed(lineNum);
-    } catch (const std::out_of_range &) {
-      readFailed(lineNum);
-    }
-    lineNum++;
+    data.push_back(line);
   }
-  inStream.close();
-
-  return prices;
+  return data;
 }
 
 } // namespace Project5

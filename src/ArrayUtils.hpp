@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include <array>
+#include <cstring>
 #include <iterator>
 #include <string>
 

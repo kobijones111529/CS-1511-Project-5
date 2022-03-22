@@ -12,19 +12,31 @@ double calculateMean(const std::vector<double> &values) {
          values.size();
 }
 
-double calculateMedianSorted(const std::vector<double> &values) {
-  if (values.size() == 0) {
+double calculateMedian(const std::vector<double> &data, bool sorted) {
+  if (data.size() == 0) {
     return 0;
   }
 
-  if (values.size() % 2) {
-    return values[(values.size() - 1) / 2];
+  const auto calculate = [](const std::vector<double> &data) {
+    if (data.size() % 2) {
+      return data[(data.size() - 1) / 2];
+    } else {
+      return calculateMean(
+          {data[data.size() / 2 - 1], data[data.size() / 2]});
+    }
+  };
+
+  if (sorted) {
+    return calculate(data);
   } else {
-    std::array<double, 2> middle = {values[values.size() / 2 - 1],
-                                    values[values.size() / 2]};
-    return (double)std::accumulate(middle.begin(), middle.end(), (double)0) /
-           middle.size();
+    const std::vector<double> dataSorted = [&data]() {
+      std::vector<double> dataSorted = data;
+      std::sort(dataSorted.begin(), dataSorted.end());
+      return dataSorted;
+    }();
+    return calculate(dataSorted);
   }
 }
+
 } // namespace Vector
 } // namespace Project5

@@ -33,14 +33,11 @@ int main() {
   std::vector<double> vector = Project5::mapMaybe(
       Project5::readMaybeDouble(Project5::readDataVectorString(filePath)));
 
-  // Sort data
-  std::sort(vector.begin(), vector.end());
-
   // Calculate mean
   double vectorMean = Project5::Vector::calculateMean(vector);
 
   // Calculate median
-  double vectorMedian = Project5::Vector::calculateMedianSorted(vector);
+  double vectorMedian = Project5::Vector::calculateMedian(vector, false);
 
   std::cout << "Mean: " << vectorMean << std::endl;
   std::cout << "Median: " << vectorMedian << std::endl;

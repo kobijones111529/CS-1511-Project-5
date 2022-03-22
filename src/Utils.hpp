@@ -63,7 +63,6 @@ std::optional<double> parseDouble(const std::string &str) {
     double value = stod_strict(str);
     return std::optional(value);
   } catch (const std::invalid_argument &) {
-
   } catch (const std::out_of_range &) {
   }
   return std::nullopt;

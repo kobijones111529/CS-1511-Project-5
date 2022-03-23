@@ -71,6 +71,8 @@
         "__functional_base": "cpp",
         "algorithm": "cpp",
         "functional": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "any": "cpp",
+        "typeindex": "cpp"
     }
 }

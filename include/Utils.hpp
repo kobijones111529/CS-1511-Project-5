@@ -8,7 +8,6 @@ namespace Project5 {
 /**
  * @brief std::identity works in Clang 13.0.0 but not GCC 9.3.0 so I just copied
  * a possible implementation
- *
  */
 struct identity {
   using is_transparent = void;
@@ -69,6 +68,12 @@ void transform_if(Src &&src, Dst &&dst, F &&f = {}) {
   }
 }
 
+/**
+ * @brief Parse string to double
+ *
+ * @param str String to parse
+ * @return Value or empty
+ */
 std::optional<double> parseDouble(const std::string &str) {
   try {
     double value = stod_strict(str);
@@ -79,6 +84,12 @@ std::optional<double> parseDouble(const std::string &str) {
   return std::nullopt;
 }
 
+/**
+ * @brief Parse list of strings to doubles
+ *
+ * @param vec Strings to parse
+ * @return List of optionals
+ */
 std::vector<std::optional<double>>
 readMaybeDouble(const std::vector<std::string> &vec) {
   std::vector<std::optional<double>> out;
@@ -86,13 +97,18 @@ readMaybeDouble(const std::vector<std::string> &vec) {
   return out;
 }
 
+/**
+ * @brief Haskell inspired optional filtering
+ *
+ * @tparam T Inner type
+ * @param vec List of optionals
+ * @return Filtered list
+ */
 template <typename T>
 std::vector<T> mapMaybe(const std::vector<std::optional<T>> &vec) {
   std::vector<T> out;
   transform_if(vec, std::back_inserter(out));
   return out;
 }
-
-template <typename T> T mean(T a, T b) { return (a + b) / 2.0; }
 
 } // namespace Project5

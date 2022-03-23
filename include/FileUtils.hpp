@@ -26,8 +26,8 @@ void printInvalidLines(const std::vector<int> &lines) {
   std::cerr << ss.str() << std::endl;
 }
 
-size_t readDataArray(const std::string &filePath, int bufferSize,
-                     double buffer[]) {
+size_t readDataFromFile(const std::string &filePath, int bufferSize,
+                        double buffer[]) {
   std::ifstream fileStream;
   std::string line;
 
@@ -39,11 +39,13 @@ size_t readDataArray(const std::string &filePath, int bufferSize,
 
   int i = 0;
   int lineNum = 1;
-  std::vector<int> invalidLines = {};
+  std::vector<int> invalidLines;
   while (i < bufferSize && fileStream >> line) {
     std::optional<double> price = parseDouble(line);
     if (const auto &&p = parseDouble(line)) {
       buffer[i++] = *p;
+    } else {
+      invalidLines.push_back(lineNum);
     }
     lineNum++;
   }
@@ -51,7 +53,7 @@ size_t readDataArray(const std::string &filePath, int bufferSize,
   return i;
 }
 
-std::vector<std::string> readDataVectorString(const std::string &filePath) {
+std::vector<std::string> readDataFromFile(const std::string &filePath) {
   std::ifstream inStream;
 
   inStream.open(filePath);
@@ -60,9 +62,8 @@ std::vector<std::string> readDataVectorString(const std::string &filePath) {
     return {};
   }
 
-  std::string line;
   std::vector<std::string> data;
-  while (inStream >> line) {
+  for (std::string line; inStream >> line;) {
     data.push_back(line);
   }
   return data;

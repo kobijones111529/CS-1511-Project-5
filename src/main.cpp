@@ -6,9 +6,18 @@
 
 #include <fmt/format.h>
 
-std::string formatPrice(double price) {
-  return fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", price);
-}
+template <typename T> struct PriceData {
+  T mean;
+  T median;
+
+  PriceData(T _mean, T _median) : mean(_mean), median(_median) {}
+};
+
+std::string formatPrice(double);
+std::string prompt(const std::string &);
+template <typename T = double>
+PriceData<T> usingArrays(const std::string &, const int);
+template <typename T = double> PriceData<T> usingVectors(const std::string &);
 
 int main() {
   // std::vector<Vec2> fooVec = {Vec2(0, 0), Vec2(1, 2), Vec2(3, 5)};
@@ -20,41 +29,78 @@ int main() {
   const std::string filePath = "prices.txt";
   const int bufferSize = 100;
 
-  // Using array
-  std::cout << "Using array:" << std::endl;
+  bool useVectors = [](const std::string &input) {
+    return input == "y" || input == "Y";
+  }(prompt("Use fancy vector stuff (y/n): "));
 
-  double array[bufferSize];
+  PriceData data =
+      useVectors ? usingVectors(filePath) : usingArrays(filePath, bufferSize);
 
-  // Read prices from file
-  int arraySize = Project5::readDataArray(filePath, bufferSize, array);
+  std::cout << "Mean: " << formatPrice(data.mean) << std::endl;
+  std::cout << "Median: " << formatPrice(data.median) << std::endl;
+}
 
-  // Calculate mean
-  double arrayMean = Project5::Array::calculateMean(array, arraySize);
-  // double arrayMean = Project5::Vector::calculateMean(std::begin(array),
-  // std::begin(array) + arraySize);
+/**
+ * @brief Pretty currency formatting
+ * 
+ * @param price
+ * @return Prettified string
+ */
+std::string formatPrice(double price) {
+  return fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", price);
+}
 
-  // Calculate median
-  double arrayMedian = Project5::Array::calculateMedian(array, arraySize);
-  // double arrayMedian = Project5::Vector::calculateMedian(std::begin(array),
-  // std::begin(array) + arraySize, 0.0);
+/**
+ * @brief Get input from user
+ * 
+ * @param msg Prompt for the user
+ * @return Input
+ */
+std::string prompt(const std::string &msg) {
+  std::string input;
+  std::cout << msg;
+  std::cin >> input;
+  return input;
+}
 
-  std::cout << "Mean: " << formatPrice(arrayMean) << std::endl;
-  std::cout << "Median: " << formatPrice(arrayMedian) << std::endl;
+/**
+ * @brief Get data using C style arrays
+ * 
+ * @tparam T Numerical type
+ * @param filePath Path to data file
+ * @param bufferSize Buffer size to allocate
+ * @return Price data
+ */
+template <typename T>
+PriceData<T> usingArrays(const std::string &filePath, const int bufferSize) {
+  double data[bufferSize];
+  int size = Project5::readDataFromFile(filePath, bufferSize, data);
+  return PriceData<T>(Project5::Array::calculateMean(data, size),
+                      Project5::Array::calculateMedian(data, size));
+}
 
-  // Using vector
-  std::cout << "Using vector:" << std::endl;
+/**
+ * @brief Get data using C++ style vectors
+ * 
+ * @tparam T Numerical type
+ * @param filePath Path to data file
+ * @return Price data
+ */
+template <typename T> PriceData<T> usingVectors(const std::string &filePath) {
+  auto dataMaybe =
+      Project5::readMaybeDouble(Project5::readDataFromFile(filePath));
 
-  std::vector<double> vector = Project5::mapMaybe(
-      Project5::readMaybeDouble(Project5::readDataVectorString(filePath)));
+  // Notify user of invalid lines in data file
+  std::vector<int> invalidLines;
+  for (int i = 0; i < dataMaybe.size(); i++) {
+    if (!dataMaybe[i]) {
+      invalidLines.push_back(i + 1);
+    }
+  }
+  Project5::printInvalidLines(invalidLines);
 
-  // Calculate mean
-  double vectorMean =
-      Project5::Vector::calculateMean(vector.begin(), vector.end(), 0.0);
-
-  // Calculate median
-  double vectorMedian =
-      Project5::Vector::calculateMedian(vector.begin(), vector.end(), 0.0);
-
-  std::cout << "Mean: " << formatPrice(vectorMean) << std::endl;
-  std::cout << "Median: " << formatPrice(vectorMedian) << std::endl;
+  auto data = Project5::mapMaybe(dataMaybe);
+  return PriceData<T>(
+      Project5::Vector::calculateMean(data.begin(), data.end(), 0.0),
+      Project5::Vector::calculateMedian(data.begin(), data.end(), 0.0));
 }

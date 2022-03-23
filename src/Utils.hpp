@@ -6,6 +6,19 @@
 namespace Project5 {
 
 /**
+ * @brief std::identity works in Clang 13.0.0 but not GCC 9.3.0 so I just copied a possible
+ * implementation
+ *
+ */
+struct identity {
+  using is_transparent = void;
+
+  template <typename T> constexpr T &&operator()(T &&t) const noexcept {
+    return std::forward<T>(t);
+  }
+};
+
+/**
  * @brief String to double conversion using stod,
  * but fails if the entire string is not read.
  *
@@ -47,7 +60,7 @@ double stod_strict(const std::wstring &str, size_t *idx = nullptr) {
   }
 }
 
-template <class Src, class Dst, class F = std::identity>
+template <class Src, class Dst, class F = identity>
 void transform_if(Src &&src, Dst &&dst, F &&f = {}) {
   for (auto &&x : std::forward<Src>(src)) {
     if (auto &&e = f(decltype(x)(x))) {
@@ -80,9 +93,6 @@ std::vector<T> mapMaybe(const std::vector<std::optional<T>> &vec) {
   return out;
 }
 
-template <typename T>
-T mean(T a, T b) {
-  return (a + b) / 2.0;
-}
+template <typename T> T mean(T a, T b) { return (a + b) / 2.0; }
 
 } // namespace Project5

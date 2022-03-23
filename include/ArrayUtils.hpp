@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 
+#include <complex>
 #include <cstring>
 #include <string>
 
@@ -29,17 +30,16 @@ void insertionSort(double data[], int size) {
 
 /**
  * @brief Selection sort
- * 
+ *
  * @param data Initialized data
  * @param size Size of array
  */
 void selectionSort(double data[], int size) {
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size - 1; i++) {
     int s = i;
     for (int j = i + 1; j < size; j++) {
-      if (data[j] < data[s]) {
+      if (data[j] < data[s])
         s = j;
-      }
     }
     std::swap(data[i], data[s]);
   }
@@ -47,7 +47,7 @@ void selectionSort(double data[], int size) {
 
 /**
  * @brief Calculate mean of array
- * 
+ *
  * @param data Initialized data
  * @param size Size of array
  * @return Mean
@@ -66,7 +66,7 @@ double calculateMean(const double data[], int size) {
 
 /**
  * @brief Calculate median of array
- * 
+ *
  * @param data Initialized data
  * @param size Size of array
  * @param sorted Is data already sorted
@@ -93,6 +93,16 @@ double calculateMedian(const double data[], size_t size, bool sorted = false) {
     selectionSort(dataSorted, size);
     return calculate(dataSorted, size);
   }
+}
+
+double calculateStandardDeviation(const double data[], size_t size) {
+  double mean = calculateMean(data, size);
+  double sum = 0;
+  for (size_t i = 0; i < size; i++) {
+    double diff = data[i] - mean;
+    sum += diff * diff;
+  }
+  return std::sqrt(sum / size);
 }
 
 } // namespace Array

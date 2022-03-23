@@ -6,8 +6,8 @@
 namespace Project5 {
 
 /**
- * @brief std::identity works in Clang 13.0.0 but not GCC 9.3.0 so I just copied
- * a possible implementation
+ * @brief std::identity seems like it has iffy support so I just copied a
+ * possible implementation
  */
 struct identity {
   using is_transparent = void;
@@ -27,7 +27,7 @@ struct identity {
  */
 double stod_strict(const std::string &str, size_t *idx = nullptr) {
   size_t read;
-  double value = stod(str, &read);
+  double value = std::stod(str, &read);
   if (read == str.size()) {
     if (idx != nullptr) {
       *idx = read;
@@ -39,8 +39,8 @@ double stod_strict(const std::string &str, size_t *idx = nullptr) {
 }
 
 /**
- * @brief Wide string to double conversion using stod,
- * but fails if the entire string is not read.
+ * @brief Wide string to double conversion using stod, but fails if the entire
+ * string is not read.
  *
  * @param str
  * @param idx
@@ -48,7 +48,7 @@ double stod_strict(const std::string &str, size_t *idx = nullptr) {
  */
 double stod_strict(const std::wstring &str, size_t *idx = nullptr) {
   size_t read;
-  double value = stod(str, &read);
+  double value = std::stod(str, &read);
   if (read == str.size()) {
     if (idx != nullptr) {
       *idx = read;

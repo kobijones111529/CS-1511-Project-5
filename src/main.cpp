@@ -9,8 +9,10 @@
 template <typename T> struct PriceData {
   T mean;
   T median;
+  T standardDeviation;
 
-  PriceData(T _mean, T _median) : mean(_mean), median(_median) {}
+  PriceData(T _mean, T _median, T _standardDeviation)
+      : mean(_mean), median(_median), standardDeviation(_standardDeviation) {}
 };
 
 std::string formatPrice(double);
@@ -41,11 +43,13 @@ int main() {
   // Print formatted data
   std::cout << "Mean: " << formatPrice(data.mean) << std::endl;
   std::cout << "Median: " << formatPrice(data.median) << std::endl;
+  std::cout << "Standard deviation: " << formatPrice(data.standardDeviation)
+            << std::endl;
 }
 
 /**
  * @brief Pretty currency formatting
- * 
+ *
  * @param price
  * @return Prettified string
  */
@@ -55,7 +59,7 @@ std::string formatPrice(double price) {
 
 /**
  * @brief Get input from user
- * 
+ *
  * @param msg Prompt for the user
  * @return Input
  */
@@ -68,7 +72,7 @@ std::string prompt(const std::string &msg) {
 
 /**
  * @brief Get data using C style arrays
- * 
+ *
  * @tparam T Numerical type
  * @param filePath Path to data file
  * @param bufferSize Buffer size to allocate
@@ -79,12 +83,13 @@ PriceData<T> usingArrays(const std::string &filePath, const int bufferSize) {
   double data[bufferSize];
   int size = Project5::readDataFromFile(filePath, bufferSize, data);
   return PriceData<T>(Project5::Array::calculateMean(data, size),
-                      Project5::Array::calculateMedian(data, size));
+                      Project5::Array::calculateMedian(data, size),
+                      Project5::Array::calculateStandardDeviation(data, size));
 }
 
 /**
  * @brief Get data using C++ style vectors
- * 
+ *
  * @tparam T Numerical type
  * @param filePath Path to data file
  * @return Price data
@@ -105,5 +110,7 @@ template <typename T> PriceData<T> usingVectors(const std::string &filePath) {
   auto data = Project5::mapMaybe(dataMaybe);
   return PriceData<T>(
       Project5::Vector::calculateMean(data.begin(), data.end(), 0.0),
-      Project5::Vector::calculateMedian(data.begin(), data.end(), 0.0));
+      Project5::Vector::calculateMedian(data.begin(), data.end(), 0.0),
+      Project5::Vector::calculateStandardDeviation(data.begin(), data.end(),
+                                                   0.0));
 }

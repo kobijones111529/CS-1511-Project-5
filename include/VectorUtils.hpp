@@ -5,6 +5,16 @@
 namespace Project5 {
 namespace Vector {
 
+/**
+ * @brief Calculate mean of range
+ * 
+ * @tparam T Data type
+ * @tparam InputIterator Iterator type
+ * @param first Start iterator
+ * @param last End iterator
+ * @param defaultValue Value if empty range
+ * @return Mean
+ */
 template <typename T, typename InputIterator>
 T calculateMean(InputIterator first, InputIterator last, T defaultValue) {
   if (first >= last) {
@@ -14,6 +24,17 @@ T calculateMean(InputIterator first, InputIterator last, T defaultValue) {
          static_cast<double>(last - first));
 }
 
+/**
+ * @brief Calculate median of range
+ * 
+ * @tparam T Data type
+ * @tparam InputIterator Iterator type
+ * @param first Start iterator
+ * @param last End iterator
+ * @param defaultValue Value if empty range
+ * @param sorted Is data already sorted
+ * @return Median
+ */
 template <typename T, typename InputIterator>
 T calculateMedian(InputIterator first, InputIterator last, T defaultValue, bool sorted = false) {
   if (first >= last) {

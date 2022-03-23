@@ -29,13 +29,16 @@ int main() {
   const std::string filePath = "prices.txt";
   const int bufferSize = 100;
 
+  // Prompt user if program should use C style arrays or C++ style vectors
   bool useVectors = [](const std::string &input) {
     return input == "y" || input == "Y";
   }(prompt("Use fancy vector stuff (y/n): "));
 
+  // Read and process data
   PriceData data =
       useVectors ? usingVectors(filePath) : usingArrays(filePath, bufferSize);
 
+  // Print formatted data
   std::cout << "Mean: " << formatPrice(data.mean) << std::endl;
   std::cout << "Median: " << formatPrice(data.median) << std::endl;
 }

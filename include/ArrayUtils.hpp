@@ -27,6 +27,12 @@ void insertionSort(double data[], int size) {
   }
 }
 
+/**
+ * @brief Selection sort
+ * 
+ * @param data Initialized data
+ * @param size Size of array
+ */
 void selectionSort(double data[], int size) {
   for (int i = 0; i < size; i++) {
     int s = i;
@@ -39,6 +45,13 @@ void selectionSort(double data[], int size) {
   }
 }
 
+/**
+ * @brief Calculate mean of array
+ * 
+ * @param data Initialized data
+ * @param size Size of array
+ * @return Mean
+ */
 double calculateMean(const double data[], int size) {
   if (size < 1) {
     return 0.0;
@@ -51,6 +64,14 @@ double calculateMean(const double data[], int size) {
   return sum / size;
 }
 
+/**
+ * @brief Calculate median of array
+ * 
+ * @param data Initialized data
+ * @param size Size of array
+ * @param sorted Is data already sorted
+ * @return Median
+ */
 double calculateMedian(const double data[], size_t size, bool sorted = false) {
   const auto calculate = [](const double data[], size_t size) {
     if (size < 1) {

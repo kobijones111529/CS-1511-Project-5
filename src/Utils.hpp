@@ -1,8 +1,6 @@
 #pragma once
 
-#include <algorithm>
 #include <optional>
-#include <string>
 #include <vector>
 
 namespace Project5 {
@@ -49,8 +47,8 @@ double stod_strict(const std::wstring &str, size_t *idx = nullptr) {
   }
 }
 
-template <class Src, class Dst, class F>
-void transform_if(Src &&src, Dst &&dst, F &&f) {
+template <class Src, class Dst, class F = std::identity>
+void transform_if(Src &&src, Dst &&dst, F &&f = {}) {
   for (auto &&x : std::forward<Src>(src)) {
     if (auto &&e = f(decltype(x)(x))) {
       *dst++ = *decltype(e)(e);
@@ -78,9 +76,13 @@ readMaybeDouble(const std::vector<std::string> &vec) {
 template <typename T>
 std::vector<T> mapMaybe(const std::vector<std::optional<T>> &vec) {
   std::vector<T> out;
-  transform_if(vec, std::inserter(out, out.begin()),
-               [](const std::optional<T> opt) { return opt; });
+  transform_if(vec, std::back_inserter(out));
   return out;
+}
+
+template <typename T>
+T mean(T a, T b) {
+  return (a + b) / 2.0;
 }
 
 } // namespace Project5

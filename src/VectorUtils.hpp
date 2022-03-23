@@ -1,40 +1,48 @@
 #pragma once
 
-#include <array>
 #include <numeric>
-#include <vector>
 
 namespace Project5 {
 namespace Vector {
 
-double calculateMean(const std::vector<double> &values) {
-  return (double)std::accumulate(values.begin(), values.end(), (double)0) /
-         values.size();
+template <typename T, typename InputIterator>
+T calculateMean(InputIterator first, InputIterator last, T defaultValue) {
+  if (first >= last) {
+    return defaultValue;
+  }
+  return static_cast<T>(std::accumulate(first + 1, last, *first) /
+         static_cast<double>(last - first));
 }
 
-double calculateMedian(const std::vector<double> &data, bool sorted) {
-  if (data.size() == 0) {
-    return 0;
+template <typename T, typename InputIterator>
+T calculateMedian(InputIterator first, InputIterator last, T defaultValue, bool sorted = false) {
+  if (first >= last) {
+    return defaultValue;
   }
 
-  const auto calculate = [](const std::vector<double> &data) {
-    if (data.size() % 2) {
-      return data[(data.size() - 1) / 2];
+  const auto calculate = [](auto first, auto last, auto defaultValue) {
+    if (first >= last) {
+      return defaultValue;
+    }
+    auto count = last - first;
+    if (count % 2) {
+      return static_cast<T>(*(first + (count - 1) / 2));
     } else {
-      return calculateMean(
-          {data[data.size() / 2 - 1], data[data.size() / 2]});
+      auto middle = first + count / 2;
+      return static_cast<T>(calculateMean(middle - 1, middle + 1, defaultValue));
     }
   };
 
   if (sorted) {
-    return calculate(data);
+    return static_cast<T>(calculate(first, last, defaultValue));
   } else {
-    const std::vector<double> dataSorted = [&data]() {
-      std::vector<double> dataSorted = data;
+    auto count = last - first;
+    const auto dataSorted = [](auto first, auto last) {
+      auto dataSorted = std::vector(first, last);
       std::sort(dataSorted.begin(), dataSorted.end());
       return dataSorted;
-    }();
-    return calculate(dataSorted);
+    }(first, last);
+    return static_cast<T>(calculate(dataSorted.begin(), dataSorted.end(), defaultValue));
   }
 }
 

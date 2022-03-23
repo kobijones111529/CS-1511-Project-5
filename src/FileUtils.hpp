@@ -4,10 +4,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <memory>
 #include <sstream>
-#include <string>
-#include <vector>
 
 namespace Project5 {
 
@@ -44,14 +41,9 @@ size_t readDataArray(const std::string &filePath, int bufferSize,
   int lineNum = 1;
   std::vector<int> invalidLines = {};
   while (i < bufferSize && fileStream >> line) {
-    try {
-      double price = stod_strict(line);
-      buffer[i] = price;
-      i++;
-    } catch (const std::invalid_argument &) {
-      invalidLines.push_back(lineNum);
-    } catch (const std::out_of_range &) {
-      invalidLines.push_back(lineNum);
+    std::optional<double> price = parseDouble(line);
+    if (const auto &&p = parseDouble(line)) {
+      buffer[i++] = *p;
     }
     lineNum++;
   }

@@ -36,11 +36,11 @@ public:
 };
 
 int main() {
-  std::vector<Vec2> fooVec = {Vec2(0, 0), Vec2(1, 2), Vec2(3, 5)};
+  /*std::vector<Vec2> fooVec = {Vec2(0, 0), Vec2(1, 2), Vec2(3, 5)};
   std::cout << Project5::Vector::calculateMean(fooVec.begin(), fooVec.end(),
                                                Vec2(0, 0))
                    .y
-            << std::endl;
+            << std::endl;*/
 
   const std::string filePath = "prices.txt";
   const int bufferSize = 100;
@@ -63,8 +63,8 @@ int main() {
   // double arrayMedian = Project5::Vector::calculateMedian(std::begin(array),
   // std::begin(array) + arraySize, 0.0);
 
-  std::cout << "Mean: " << fmt::format(std::locale("en_US"), "${:.2Lf}", arrayMean) << std::endl;
-  std::cout << "Median: " << fmt::format(std::locale("en_US"), "${:.2Lf}", arrayMedian) << std::endl;
+  std::cout << "Mean: " << fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", arrayMean) << std::endl;
+  std::cout << "Median: " << fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", arrayMedian) << std::endl;
 
   // Using vector
   std::cout << "Using vector:" << std::endl;
@@ -80,6 +80,6 @@ int main() {
   double vectorMedian =
       Project5::Vector::calculateMedian(vector.begin(), vector.end(), 0.0);
 
-  std::cout << "Mean: " << fmt::format(std::locale("en_US"), "${:.2Lf}", vectorMean) << std::endl;
-  std::cout << "Median: " << fmt::format(std::locale("en_US"), "${:.2Lf}", vectorMedian) << std::endl;
+  std::cout << "Mean: " << fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", vectorMean) << std::endl;
+  std::cout << "Median: " << fmt::format(std::locale("en_US.UTF-8"), "${:.2Lf}", vectorMedian) << std::endl;
 }

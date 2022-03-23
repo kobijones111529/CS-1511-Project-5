@@ -6,8 +6,8 @@
 namespace Project5 {
 
 /**
- * @brief std::identity works in Clang 13.0.0 but not GCC 9.3.0 so I just copied a possible
- * implementation
+ * @brief std::identity works in Clang 13.0.0 but not GCC 9.3.0 so I just copied
+ * a possible implementation
  *
  */
 struct identity {
@@ -60,7 +60,7 @@ double stod_strict(const std::wstring &str, size_t *idx = nullptr) {
   }
 }
 
-template <class Src, class Dst, class F = identity>
+template <typename Src, typename Dst, typename F = identity>
 void transform_if(Src &&src, Dst &&dst, F &&f = {}) {
   for (auto &&x : std::forward<Src>(src)) {
     if (auto &&e = f(decltype(x)(x))) {

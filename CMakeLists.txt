@@ -14,6 +14,6 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
 
-target_include_directories(${PROJECT_NAME} PRIVATE src lib)
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
-configure_file(${PROJECT_SOURCE_DIR}/src/prices.txt ${PROJECT_BINARY_DIR} COPYONLY)
+configure_file(prices.txt ${PROJECT_BINARY_DIR} COPYONLY)

@@ -3,6 +3,8 @@
 #include "Utils.hpp"
 #include "VectorUtils.hpp"
 
+#include "fmt/format.h"
+
 class Vec2 {
 public:
   double x, y;
@@ -61,8 +63,8 @@ int main() {
   // double arrayMedian = Project5::Vector::calculateMedian(std::begin(array),
   // std::begin(array) + arraySize, 0.0);
 
-  std::cout << "Mean: " << arrayMean << std::endl;
-  std::cout << "Median: " << arrayMedian << std::endl;
+  std::cout << "Mean: " << fmt::format(std::locale("en_US"), "${:.2Lf}", arrayMean) << std::endl;
+  std::cout << "Median: " << fmt::format(std::locale("en_US"), "${:.2Lf}", arrayMedian) << std::endl;
 
   // Using vector
   std::cout << "Using vector:" << std::endl;
@@ -78,6 +80,6 @@ int main() {
   double vectorMedian =
       Project5::Vector::calculateMedian(vector.begin(), vector.end(), 0.0);
 
-  std::cout << "Mean: " << vectorMean << std::endl;
-  std::cout << "Median: " << vectorMedian << std::endl;
+  std::cout << "Mean: " << fmt::format(std::locale("en_US"), "${:.2Lf}", vectorMean) << std::endl;
+  std::cout << "Median: " << fmt::format(std::locale("en_US"), "${:.2Lf}", vectorMedian) << std::endl;
 }
